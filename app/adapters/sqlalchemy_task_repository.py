@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from app.domain.interfaces import TaskRepository
-from app.domain.models import Task, Comment, PriorityEnum
+from app.domain.models import Task, Comment
 from app.infrastructure.database import SessionLocal
 
 class SQLAlchemyTaskRepository(TaskRepository):

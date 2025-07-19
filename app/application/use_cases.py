@@ -1,7 +1,7 @@
 from typing import List, Optional
 from app.domain.interfaces import TaskRepository
 from app.domain.models import Task, Comment
-from app.presentation.dtos import TaskCreateDTO, TaskUpdateDTO, TaskResponseDTO, PriorityEnum
+from app.presentation.dtos import TaskCreateDTO, TaskUpdateDTO, TaskResponseDTO 
 from datetime import datetime
 
 class TaskUseCases:
@@ -30,10 +30,6 @@ class TaskUseCases:
 
     def update_task(self, task_id: int, task_data: TaskUpdateDTO) -> Optional[TaskResponseDTO]:
         updates = task_data.dict(exclude_unset=True)
-
-        if 'priority' in updates and isinstance(updates['priority'], PriorityEnum):
-             updates['priority'] = updates['priority'] # SQLAlchemy ya maneja el Enum
-
         updated_task = self.task_repo.update_task(task_id, updates)
         return TaskResponseDTO.from_orm(updated_task) if updated_task else None
 

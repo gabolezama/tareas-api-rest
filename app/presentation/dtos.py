@@ -1,18 +1,12 @@
 from typing import Optional
 from datetime import datetime
-from enum import Enum
-from pydantic import BaseModel, Field
-
-class PriorityEnum(str, Enum):
-    low = "low"
-    medium = "medium"
-    high = "high"
+from pydantic import BaseModel, Field, conint
 
 class TaskCreateDTO(BaseModel):
     title: str = Field(..., min_length=3, max_length=100)
     description: Optional[str] = Field(None, max_length=500)
     due_date: Optional[datetime] = None
-    priority: PriorityEnum = PriorityEnum.medium
+    priority: conint(ge=1, le=3) = 2
     category: Optional[str] = Field(None, max_length=50)
 
 class TaskUpdateDTO(BaseModel):
@@ -20,7 +14,7 @@ class TaskUpdateDTO(BaseModel):
     description: Optional[str] = Field(None, max_length=500)
     completed: Optional[bool] = None
     due_date: Optional[datetime] = None
-    priority: Optional[PriorityEnum] = None
+    priority: Optional[conint(ge=1, le=3)] = None
     category: Optional[str] = Field(None, max_length=50)
 
 class TaskResponseDTO(BaseModel):
@@ -29,10 +23,10 @@ class TaskResponseDTO(BaseModel):
     description: Optional[str]
     completed: bool
     due_date: Optional[datetime]
-    priority: PriorityEnum
+    priority: int
     category: Optional[str]
     created_at: datetime
     updated_at: datetime
 
     class Config:
-        orm_mode = True # Permite que Pydantic lea de modelos ORM
+        orm_mode = True

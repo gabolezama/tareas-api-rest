@@ -29,8 +29,8 @@ services:
     environment:
       DATABASE_URL: postgresql://user:password@db:5432/task_manager_db
     volumes:
-      - .:/app # Monta el código fuente para desarrollo (cambios en el código se reflejan sin reconstruir la imagen)
-    command: python -m app.main # Punto de entrada de tu aplicación Tornado
+      - .:/app
+    command: python -m app.main
 
 volumes:
-  db_data: # Define un volumen para persistir los datos de la base de datos
+  db_data:
