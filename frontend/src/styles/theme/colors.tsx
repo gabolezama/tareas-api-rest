@@ -11,4 +11,7 @@ export const colors = {
     black: '#000000',
     textLight: '#f8f9fa',
     textDark: '#343a40',
+    inputBackground: '#3a3a5a',
+    inputText: '#e0e0e0',
+    primaryDark: '#0056b3',
   };

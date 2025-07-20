@@ -6,19 +6,33 @@ from app.infrastructure.database import SessionLocal, get_db
 from app.presentation.dtos import TaskCreateDTO, TaskUpdateDTO, TaskResponseDTO
 from pydantic import ValidationError
 
-# Decorador para inyectar la sesión de DB y cerrar al finalizar
 def with_db_session(func):
     def wrapper(self, *args, **kwargs):
-        db = next(get_db()) # Obtiene una nueva sesión de la base de datos
+        db = next(get_db())
         try:
             task_repo = SQLAlchemyTaskRepository(db)
             task_use_cases = TaskUseCases(task_repo)
             return func(self, task_use_cases, *args, **kwargs)
         finally:
-            db.close() # Asegura que la sesión se cierre
+            db.close()
     return wrapper
 
 class BaseHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "http://localhost:3000")
+        
+        self.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+
+        self.set_header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+
+        self.set_header("Access-Control-Allow-Credentials", "true")
+
+        self.set_header("Content-Type", "application/json") 
+
+    def options(self):
+        self.set_status(204)
+        self.finish()
+
     def prepare(self):
         if self.request.body:
             try:
@@ -28,9 +42,6 @@ class BaseHandler(tornado.web.RequestHandler):
                 self.json_data = {}
         else:
             self.json_data = {}
-
-    def set_default_headers(self):
-        self.set_header("Content-Type", "application/json")
 
     def write_error(self, status_code, **kwargs):
         if "reason" in kwargs:
@@ -59,6 +70,10 @@ class TaskListHandler(BaseHandler):
             self.send_error(500, reason=f"Internal Server Error: {str(e)}")
 
 class TaskDetailHandler(BaseHandler):
+    def options(self, task_id: str):
+        self.set_status(204)
+        self.finish()
+        
     @with_db_session
     async def get(self, task_use_cases: TaskUseCases, task_id: str):
         try:

@@ -1,7 +1,9 @@
-import React from 'react';
+// frontend/src/features/tasks/TaskList.tsx
+import React, { useEffect, useState } from 'react'; // Asegúrate de importar useState
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../app/store';
-import { addTask, updateTaskStatus, Task } from './tasksSlice';
+import { fetchTasks, updateTask, deleteTask, Task } from './tasksSlice';
+import TaskForm from '../tasks/components/TaskForm';
 
 import {
   TaskListWrapper,
@@ -17,22 +19,36 @@ const TaskList: React.FC = () => {
   const status = useSelector((state: RootState) => state.tasks.status);
   const error = useSelector((state: RootState) => state.tasks.error);
   const dispatch = useDispatch<AppDispatch>();
+  const [showForm, setShowForm] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState<Task | undefined>(undefined);
 
-  const handleAddTask = () => {
-    const newTask: Task = {
-      id: tasks.length + 1, // ID temporal
-      title: `Nueva Tarea ${tasks.length + 1}`,
-      description: "Esta es una tarea de ejemplo desde el frontend.",
-      completed: false,
-      priority: Math.floor(Math.random() * 3) + 1, // Random priority
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-    dispatch(addTask(newTask));
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchTasks());
+    }
+  }, [status, dispatch]);
+
+  const handleToggleComplete = (task: Task) => {
+    dispatch(updateTask({ id: task.id, completed: !task.completed }));
   };
 
-  const handleToggleComplete = (id: number, completed: boolean) => {
-    dispatch(updateTaskStatus({ id, completed: !completed }));
+  const handleDeleteTask = (taskId: number) => {
+    dispatch(deleteTask(taskId));
+  };
+
+  const handleOpenCreateForm = () => {
+    setTaskToEdit(undefined);
+    setShowForm(true);
+  };
+
+  const handleOpenEditForm = (task: Task) => {
+    setTaskToEdit(task);
+    setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setTaskToEdit(undefined);
   };
 
   if (status === 'loading') {
@@ -46,7 +62,15 @@ const TaskList: React.FC = () => {
   return (
     <TaskListWrapper>
       <h1>Lista de Tareas</h1>
-      <AddTaskButton onClick={handleAddTask}>Añadir Tarea (Ejemplo)</AddTaskButton>
+      
+      {!showForm && (
+        <AddTaskButton onClick={handleOpenCreateForm}>Añadir Nueva Tarea</AddTaskButton>
+      )}
+
+      {showForm && (
+        <TaskForm taskToEdit={taskToEdit} onClose={handleCloseForm} />
+      )}
+
       <ul>
         {tasks.map((task) => (
           <TaskItem key={task.id}>
@@ -57,8 +81,14 @@ const TaskList: React.FC = () => {
               <TaskDescription>{task.description}</TaskDescription>
             </div>
             <TaskActions>
-              <button onClick={() => handleToggleComplete(task.id, task.completed)}>
+              <button onClick={() => handleToggleComplete(task)}>
                 {task.completed ? 'Desmarcar' : 'Completar'}
+              </button>
+              <button onClick={() => handleOpenEditForm(task)}>
+                Editar
+              </button>
+              <button onClick={() => handleDeleteTask(task.id)} style={{ backgroundColor: '#dc3545' }}>
+                Eliminar
               </button>
             </TaskActions>
           </TaskItem>
