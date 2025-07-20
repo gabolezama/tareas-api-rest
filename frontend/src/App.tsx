@@ -20,7 +20,7 @@ function App() {
     <Container>
       <header style={{ padding: '20px', textAlign: 'right' }}>
         <button onClick={handleToggleTheme}>
-          Cambiar a Modo {themeMode === 'light' ? 'Oscuro' : 'Claro'}
+          Cambiar a Modo {themeMode === 'light' ? 'Oscuro 🌙' : 'Claro ☀️'}
         </button>
       </header>
       <Suspense fallback={<div>Cargando tareas...</div>}>

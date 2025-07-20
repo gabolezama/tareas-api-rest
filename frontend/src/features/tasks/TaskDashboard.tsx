@@ -3,27 +3,26 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { useTheme } from 'styled-components';
 
 import {
-    ChartContainer, 
-    DashboardWrapper, 
-    MetricCard, 
-    MetricLabel, 
-    MetricValue, 
-    MetricsContainer
-} from './TaskDashboard.styles'
+  DashboardWrapper,
+  ChartContainer,
+  MetricsContainer,
+  MetricCard,
+  MetricValue,
+  MetricLabel,
+} from './TaskDashboard.styles';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const TaskDashboard: React.FC = () => {
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
-
-  // Calcular el número de tareas completadas y pendientes
+  const theme = useTheme();
   const completedTasks = tasks.filter(task => task.completed).length;
   const pendingTasks = tasks.filter(task => !task.completed).length;
   const totalTasks = tasks.length;
 
-  // Datos para el gráfico de rosca
   const data = {
     labels: ['Completadas', 'Pendientes'],
     datasets: [
@@ -49,7 +48,7 @@ const TaskDashboard: React.FC = () => {
       legend: {
         position: 'top' as const,
         labels: {
-          color: 'white', // Color de las etiquetas de la leyenda
+          color: theme.colors.text, 
         },
       },
       tooltip: {
@@ -67,7 +66,12 @@ const TaskDashboard: React.FC = () => {
             }
             return label;
           }
-        }
+        },
+        bodyColor: theme.colors.text,
+        titleColor: theme.colors.text,
+        backgroundColor: theme.colors.cardBackground,
+        borderColor: theme.colors.borderColor,
+        borderWidth: 1,
       }
     }
   };
@@ -96,7 +100,7 @@ const TaskDashboard: React.FC = () => {
           <Doughnut data={data} options={options} />
         </ChartContainer>
       ) : (
-        <p>No hay tareas para mostrar en el gráfico.</p>
+        <p style={{ color: theme.colors.textLight }}>No hay tareas para mostrar en el gráfico.</p>
       )}
     </DashboardWrapper>
   );

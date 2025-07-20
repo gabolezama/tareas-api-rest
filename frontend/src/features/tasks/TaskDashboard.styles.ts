@@ -43,6 +43,5 @@ export const MetricValue = styled.h3`
 `;
 
 export const MetricLabel = styled.p`
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 0.9rem;
+  font-size: 0.9em;
 `;

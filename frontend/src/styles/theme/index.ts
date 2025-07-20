@@ -4,9 +4,11 @@ export const lightTheme = {
   colors: {
     ...colors,
     background: colors.light,
-    text: colors.textDark,
     cardBackground: colors.white,
-    borderColor: '#dee2e6',
+    borderColor: colors.borderColorLight,
+    inputBackground: colors.inputBackgroundLight,
+    inputText: colors.black,
+    text: colors.black, 
   },
   spacing: {
     small: '8px',
@@ -20,9 +22,11 @@ export const darkTheme = {
   colors: {
     ...colors,
     background: colors.dark,
-    text: colors.textLight,
+    text: colors.white,
     cardBackground: '#495057',
-    borderColor: '#6c757d',
+    borderColor: colors.borderColorDark,
+    inputBackground: colors.inputBackgroundDark,
+    inputText: colors.white,
   },
   spacing: {
     small: '8px',

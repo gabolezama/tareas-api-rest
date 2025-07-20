@@ -7,7 +7,6 @@ export const TaskListWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.cardBackground};
   border-radius: ${({ theme }) => theme.borderRadius};
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  color: ${({ theme }) => theme.colors.text};
 
   h1 {
     color: ${({ theme }) => theme.colors.primary};
@@ -22,7 +21,6 @@ export const TaskListWrapper = styled.div`
 
   p {
     text-align: center;
-    color: ${({ theme }) => theme.colors.textLight};
     margin-top: ${({ theme }) => theme.spacing.medium};
   }
 `;
@@ -107,7 +105,6 @@ export const TaskActions = styled.div`
 `;
 
 export const TaskCount = styled.p`
-  color: ${({ theme }) => theme.colors.textLight};
   font-size: 0.9em;
   white-space: nowrap;
 `;
