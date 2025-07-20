@@ -32,5 +32,20 @@ services:
       - .:/app
     command: python -m app.main
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      backend:
+        condition: service_started
+    environment:
+      REACT_APP_API_URL: http://backend:8888
+    command: npm start
+
 volumes:
   db_data:
