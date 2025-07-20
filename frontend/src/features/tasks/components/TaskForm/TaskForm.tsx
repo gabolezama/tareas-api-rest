@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../app/store';
-import { addNewTask, updateTask, Task } from '../../tasks/tasksSlice';
+import { AppDispatch } from '../../../../app/store';
+import { addNewTask, updateTask, Task } from '../../tasksSlice';
 
 import {
   FormWrapper,
@@ -12,7 +12,7 @@ import {
   TextArea,
   Select,
   SubmitButton,
-} from './TaskForm.styles';
+} from '../TaskForm/TaskForm.styles';
 
 interface TaskFormProps {
   taskToEdit?: Task;

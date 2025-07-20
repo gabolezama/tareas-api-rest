@@ -1,9 +1,12 @@
+import React, { Suspense, lazy } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from './app/store';
 import { toggleTheme } from './features/theme/themeSlice';
-import TaskList from './features/tasks/TaskList';
 
 import Container from './common/Container';
+
+// Carga perezosa del componente TaskList
+const LazyTaskList = lazy(() => import('./features/tasks/TaskList'));
 
 function App() {
   const themeMode = useSelector((state: RootState) => state.theme.mode);
@@ -14,13 +17,15 @@ function App() {
   };
 
   return (
-    <Container> {/* Usa el Container aquí */}
+    <Container>
       <header style={{ padding: '20px', textAlign: 'right' }}>
         <button onClick={handleToggleTheme}>
           Cambiar a Modo {themeMode === 'light' ? 'Oscuro' : 'Claro'}
         </button>
       </header>
-      <TaskList />
+      <Suspense fallback={<div>Cargando tareas...</div>}>
+        <LazyTaskList />
+      </Suspense>
     </Container>
   );
 }
