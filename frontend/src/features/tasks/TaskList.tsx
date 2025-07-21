@@ -4,7 +4,7 @@ import { RootState, AppDispatch } from '../../app/store';
 import { fetchTasks, updateTask, deleteTask, Task } from '../tasks/tasksSlice';
 
 import TaskForm from './components/TaskForm/TaskForm';
-import TaskDashboard from './TaskDashboard';
+import TaskDashboard from './components/TaskDashboard/TaskDashboard';
 import TaskFilter from './components/TaskFilter/TaskFilter';
 
 import {

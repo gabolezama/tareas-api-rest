@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useTheme } from 'styled-components';
@@ -13,6 +12,7 @@ import {
   MetricValue,
   MetricLabel,
 } from './TaskDashboard.styles';
+import { RootState } from '../../../../app/store';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
