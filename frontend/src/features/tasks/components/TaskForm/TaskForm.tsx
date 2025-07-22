@@ -112,7 +112,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ taskToEdit, onClose }) => {
         </FormGroup>
         
         <SubmitButton type="submit">
-          {taskToEdit ? 'Guardar Cambios' : 'Añadir Tarea'}
+          {taskToEdit ? 'Guardar Cambios' : 'Guardar Tarea'}
         </SubmitButton>
       </StyledForm>
     </FormWrapper>
