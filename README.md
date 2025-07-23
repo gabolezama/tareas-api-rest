@@ -8,42 +8,50 @@ Este proyecto es una aplicación web simple para la gestión de tareas, construi
 
 Esta aplicación te proporciona una forma sencilla e intuitiva de gestionar tus tareas. A continuación, te explicamos cómo interactuar con ella:
 
-### 1. Ver Tareas Existentes
+### Breve descripción del dashboard de tareas
 
-Al iniciar la aplicación y cargar la página principal en tu navegador, verás inmediatamente una **lista de todas las tareas** que han sido guardadas.
+Al iniciar la aplicación y cargar la página principal en tu navegador, podrás ver un dashboard con un titulo **Lista de Tareas**. Este panel consta de los siguientes secciones principales:
 
-* Cada tarea se presenta con su **título**, una **descripción** detallada y su **estado actual** (por ejemplo, "Pendiente" o "Completada").
-* La lista se actualiza automáticamente al añadir, editar o eliminar tareas, reflejando siempre el estado más reciente de tus pendientes.
+* Botón con el texto **Cambiar a Modo Oscuro**, cuya funcion es cambiar el tema de la aplicación entre claor u oscuro.
+* Seccion Estadísticas con el título **Análisis de Tareas**, la cual está encargada de mostrar los gráficos y estadísticas.
+* Filtro de Tareas, el cual es un selector desplegable donde se peude seleccionar y filtrar las tareas por su estado.
+* Botón **Añadir Nueva Tarea**, permite iniciar el proceso de crear una nueva tarea. Despliega un formulario a ser rellenado.
+* Formulario con título **Crear Nueva Tarea**, este formulario es para definir una tarea y asignarle una prioridad. SU boton 'Guardar Tarea' envía un request para guardar la nueva tarea.
+* Tareas creadas: Muestran si titulo, prioridad, descripción y tres botones: Completar, Editar y Eliminar, que agregan dinamismo en la gestion de las mismas.
 
-### 2. Crear una Nueva Tarea
+### Breve descripción los flujos
+
+#### 1. Ver Tareas Existentes
+
+Al ejecutar la aplicación verás inmediatamente el dashboard de tareas. La lista se actualiza automáticamente al añadir, editar o eliminar tareas, reflejando siempre el estado más reciente de tus pendientes.
+
+NOTA: Si no existen tareas previamente creadas, aparecera un dashboard vacío: los contadores en cero y mensajes que advierten que no existen tareas actualmente para mostrar.
+
+#### 2. Crear una Nueva Tarea
 
 Para añadir una nueva tarea a tu lista:
 
-* Busca un **botón o formulario de entrada** en la interfaz (usualmente en la parte superior o inferior de la lista).
+* Busca el botón **Añadir Nueva Tarea** en la interfaz.
 * Ingresa el **título** de tu tarea (por ejemplo, "Comprar víveres").
 * Añade una **descripción** opcional para dar más detalles (por ejemplo, "Leche, huevos, pan y fruta").
-* Una vez que hayas completado los campos necesarios, haz clic en el botón de **"Crear"** o **"Añadir"**. La nueva tarea aparecerá automáticamente en tu lista.
+* Una vez que hayas completado los campos necesarios, haz clic en el botón de **"Guardar Tarea"**. La nueva tarea aparecerá automáticamente en tu lista.
 
-### 3. Editar una Tarea Existente
+#### 3. Editar una Tarea Existente
 
 Si necesitas modificar los detalles de una tarea que ya existe:
 
 * Localiza la tarea que deseas editar en la lista.
-* Busca un **icono de "Editar"** (a menudo un lápiz) o un botón de **"Editar"** asociado a esa tarea.
+* Busca el botón **"Editar"** asociado a esa tarea.
 * Al hacer clic, se te presentará un formulario prellenado con la información actual de la tarea.
-* Modifica el **título**, la **descripción** o el **estado** según necesites.
-* Haz clic en **"Guardar"** o **"Actualizar"** para aplicar los cambios. La tarea se actualizará en la lista.
+* Modifica el **título**, la **descripción** o la **prioridad** según necesites.
+* Haz clic en **"Guardar Cambios"** para aplicar los cambios. La tarea se actualizará en la lista.
 
-### 4. Eliminar una Tarea
+#### 4. Eliminar una Tarea
 
 Cuando una tarea ya no es necesaria, puedes eliminarla fácilmente:
 
 * Encuentra la tarea que quieres borrar en tu lista.
-* Busca un **icono de "Eliminar"** (comúnmente un cubo de basura) o un botón de **"Eliminar"** junto a la tarea.
-* Al hacer clic, es posible que se te pida una **confirmación** para evitar eliminaciones accidentales.
-* Confirma la eliminación, y la tarea será **removida permanentemente** de tu lista.
-
-Este manual te ayudará a empezar a usar la aplicación de tareas de inmediato. ¡Explora y organiza tus pendientes!
+* Busca el botón **"Eliminar"** junto a la tarea. AL hacer click en el mismo la tarea será **removida permanentemente** de tu lista.
 
 ---
 
@@ -71,9 +79,10 @@ Ambos el frontend y el backend están organizados para promover la **modularidad
 
 ##### **Frontend (`frontend/`)**
 
-* **`src/components/`**: Contiene componentes React genéricos y reutilizables (botones, modales). *Razón: Maximiza la reutilización y consistencia visual.*
+* **`src/common/`**: Contiene componentes React genéricos y reutilizables (botones, modales). *Razón: Maximiza la reutilización y consistencia visual.*
 * **`src/features/`**: Agrupa toda la lógica (componentes, estado Redux, etc.) de una funcionalidad específica, como las tareas. *Razón: Facilita el mantenimiento y el escalado de características.*
-* **`src/redux/`**: Maneja el estado global de la aplicación con Redux Toolkit, incluyendo *slices* para cada parte del estado. *Razón: Centraliza la gestión del estado y simplifica las interacciones complejas.*
+* **`src/app/`**: Maneja el estado global de la aplicación con Redux Toolkit, incluyendo *slices* para cada parte del estado. 
+*Razón: Centraliza la gestión del estado y simplifica las interacciones complejas.*
 * **`public/`**: Archivos estáticos que se sirven directamente (HTML base, favicon). *Razón: Contiene los activos públicos y el punto de entrada HTML de la aplicación.*
 
 ##### **Backend (`backend/app/`)**
@@ -138,14 +147,22 @@ Desde la raíz de tu proyecto, ejecuta el siguiente comando para **construir las
 docker-compose up --build -d
 ```
 
-### 3. Detener la Aplicación
+También deberás ejecutar el comando para inicializacionde la base de datos y la actualizacion de su header:
+
+```bash
+docker-compose run --rm backend alembic upgrade head
+```
+
+Apartir de este punto el frontend quedará accesible desde el puerto '3000' y el backend en el puerto 8888 de tu IP local puesto que así está definido en la deficnicion del docker-compose.yml.
+
+## Instrucciones para dar de baja la aplicación
 
 Cuando hayas terminado de usar la aplicación, puedes **detener y eliminar los contenedores** y sus redes.
 
 Desde la raíz de tu proyecto, ejecuta:
 
 ```bash
-docker-compose down ## o docker-compose down --volumes
+docker-compose down ## o docker-compose down --volumes si deseas tambien eliminar los volumenes creados
 ```
 
 ---
