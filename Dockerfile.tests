@@ -1,0 +1,26 @@
+# Usa una imagen base de Python ligera
+FROM python:3.9-slim-buster
+
+# Establece el directorio de trabajo dentro del contenedor
+# Aquí es donde se copiará todo tu proyecto.
+WORKDIR /code
+
+# Añade el directorio de trabajo al PYTHONPATH.
+# Esto es crucial para que Python encuentre tu carpeta 'app' como un paquete.
+ENV PYTHONPATH=/code
+
+# Copia el archivo de requisitos e instala las dependencias.
+# Asume que requirements.txt está en la raíz de tu proyecto local.
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia todo el contenido de tu proyecto local al WORKDIR (/code) dentro del contenedor.
+# Esto incluye tu carpeta 'app/', 'requirements.txt', 'docker-compose.yml', etc.
+# Esto asegura que la estructura interna del contenedor sea idéntica a la de tu proyecto.
+COPY . .
+
+# Comando por defecto para ejecutar los tests.
+# Los tests están en '/code/app/tests/' debido a la copia de todo el proyecto.
+# El comando 'pytest' se ejecuta desde WORKDIR (/code).
+# Se usa --cov=app para medir la cobertura del paquete 'app'.
+CMD ["pytest", "--cov=app", "--cov-report=term-missing", "app/tests/"]

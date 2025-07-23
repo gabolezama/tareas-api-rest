@@ -47,5 +47,15 @@ services:
       REACT_APP_API_URL: http://backend:8888
     command: npm start
 
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.tests
+    # No necesitamos 'volumes' aquí, ya que todo el código se copia en la imagen.
+    # Esto asegura que el entorno de test sea autocontenido y consistente.
+    command: ["pytest", "--cov=app", "--cov-report=term-missing", "app/tests/"]
+    depends_on:
+      - backend
+
 volumes:
   db_data:
