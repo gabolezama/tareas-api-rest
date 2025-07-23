@@ -207,3 +207,88 @@ Cuando muevas la aplicación a un entorno de producción (por ejemplo, un servid
     * Gestiona secretos y claves de forma segura, lejos del control de versiones.
 
 ---
+
+# 🧪 Ejecución de Tests 
+
+Este proyecto incluye tests unitarios y de integración para el backend (Python/Tornado) usando Pytest, y tests de interfaz de usuario (UI) para el frontend usando Cypress. Ambos se pueden ejecutar fácilmente utilizando Docker Compose.
+
+## 1. Tests de Backend (Pytest)
+
+Los tests de backend se ejecutan en un contenedor Docker dedicado, asegurando un entorno de pruebas consistente y aislado sin interferir con tu sistema local.
+
+### ⚙️ Requisitos:
+
+* Docker y Docker Compose instalados.
+
+* El archivo `Dockerfile.tests` en la raíz de tu proyecto.
+
+* El archivo `.dockerignore` en la raíz de tu proyecto, con al menos la línea `frontend/` para evitar copiar la carpeta del frontend.
+
+* El archivo `requirements.txt` en la raíz de tu proyecto.
+
+* Las importaciones en tus archivos de test (`app/tests/conftest.py`, `app/tests/test_api.py`, `app/tests/test_use_cases.py`) deben usar el prefijo `app.` (ej. `from app.main import make_app`).
+
+### Pasos para Ejecutar:
+
+#### 1. **Construir la imagen de tests:**
+
+   Primero, debes construir la imagen Docker para los tests. Asegúrate de estar en el directorio raíz de tu proyecto (donde se encuentra `docker-compose.yml` y `Dockerfile.tests.new`).
+
+   ```bash
+   docker-compose build tests
+   ```
+
+#### 2. **Ejecutar los test:**
+
+    Este comando construirá la imagen tests utilizando el Dockerfile.tests.new, copiando tu código backend y sus dependencias. El archivo .dockerignore asegurará que la carpeta frontend/ no se incluya.
+
+   ```bash
+   docker-compose run --rm tests
+   ```
+
+## 2. Tests de Frontend (Cypress)
+
+Los tests de Cypress se ejecutan típicamente en el entorno de desarrollo de tu frontend. Asumo que tu carpeta frontend/ contiene una aplicación web (ej. React, Angular, Vue) con Cypress configurado.
+
+### ⚙️ Requisitos:
+
+* Docker y Docker Compose instalados.
+* Node.js y npm (o yarn) instalados en tu máquina local.
+* Tu aplicación frontend debe tener un Dockerfile y un servicio definido en tu docker-compose.yml.
+
+### Pasos para Ejecutar:
+
+#### 1. **Asegúrate de que tus servicios de backend y frontend estén corriendo**
+
+Cypress necesitará que tu aplicación frontend esté activa y que el backend esté accesible (si los tests de Cypress interactúan con él).
+
+```bash
+    docker-compose up -d backend frontend db
+```
+Asegúrate de que el puerto de tu servicio frontend esté mapeado a tu máquina local (ej. ports: - "3000:3000" en docker-compose.yml para el servicio frontend).
+
+#### 2. **Ejecutar los tests de Cypress (localmente)**
+
+Navega a la carpeta de tu frontend en tu máquina local (donde se encuentran tus tests de Cypress y package.json).
+
+```bash
+    cd frontend/
+```
+
+**Modo Headless (desde la terminal):** 👀
+
+Para ejecutar todos los tests de Cypress en modo "headless" (sin abrir el navegador visualmente), ejecuta:
+
+```bash
+    npx cypress run --config baseUrl=http://localhost:3000
+```
+Los resultados se mostrarán en la terminal.
+
+**Modo Interactivo (Cypress Test Runner):** 🖥️
+
+Para abrir la interfaz gráfica de Cypress y ver los tests ejecutarse en tiempo real, ejecuta:
+
+```bash
+    npx cypress open --config baseUrl=http://localhost:3000
+```
+Esto abrirá el Cypress Test Runner, donde podrás seleccionar y ejecutar tests individualmente, ver grabaciones y depurar.
